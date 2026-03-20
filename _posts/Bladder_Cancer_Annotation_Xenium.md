@@ -37,7 +37,9 @@ In [4] we have general curated markers for each cell type, but it's still better
 
 The only paper on the internet that uses Xenium in MIBC is the DUTRENEO paper, which the one we are working on.
 If we amplify the search criteria to spatial transcriptomics technologies in MIBC we have [Wahafu et. al 2025](https://www.sciencedirect.com/science/article/pii/S2666168323001313?ref=pdf_download&fr=RR-2&rr=9debb7123f256e11) which uses Visium 
+
 ## 6. Do papers actually reclusterize ?
+Reclustering is a used resource inside our lab. However, it is used only when other methods have failed before. In our sample right now we have 20 clusters that have an unconcrete mix of cell types, that elevated number of cell types is too high to consider SingleR + the original cluster a good first approach. Right now it might be the sample or that other algorithm like BANKSY should be tested in order to get better results.
 
 ## 7. We should take profit of the statistics 
 In pvp.markers we have: 
