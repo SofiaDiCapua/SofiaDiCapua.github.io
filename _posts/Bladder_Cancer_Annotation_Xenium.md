@@ -11,6 +11,9 @@
 
 ---
 ## 3. Problem description
+> *The aim here is to annotate cell types in the Xenium data. Xenium can allow us to take the position of the gene by limiting the variaety of genes it can read, making cell annotation extra hard compared to single cell analysis.*
+---
+
 After quality control and preprocessing (sketch, PCA, etc.), the first key step is **clustering**. The rest of the annoation pipeline will depend on these clusters, the best algorithm for this task with biological datasets is the **Leiden** algorithm, , offering faster computation and guaranteeing better-connected communities.  
 
 In Seurat, Leiden is algorithm = 4 in `FindClusters()`
