@@ -4,12 +4,15 @@
 ---
 ## 1. What is Xenium?
 > *The annotation strategy will depend on the method used to extract the RNA data*
-
+Xenium is a spatial transcriptomics technology, very recent (2022) and has huge potential as it has subcellular resolution.
+>
+> **Let me explain myself**, transcrips are mRNA molecules (very tiny pieces of DNA) that float arround our cells to finally become proteins and have a purpose. Reading the mRNA transcripts is a way to know what the cell wanted to do or what is currently doing ! And the spatial part does not refer to outer space, is about where in the tissue was that mRNA found. We can know what each cell is doing without breaking down the tissue gaining the capability of reading the interactions between cells !
 ---
 ## 2. Why is cell type annotation so important?
 > *The reference dataset will depend on the type of tissue we are dealing with*
-
 ---
+Cell type annotation is crucial because it translates raw single-cell RNA sequencing (scRNA-seq) data into meaningful biological insights, allowing researchers to identify, classify, and understand the diverse cell populations driving biological processes in health and disease. (I'm choosing to talk about scRNA-seq here because in the cell annotation process we don't care about the spatial axis, we are looking at each cell individually)
+
 ## 3. Problem description
 > *The aim here is to annotate cell types in the Xenium data. Xenium can allow us to take the position of the gene by limiting the variaety of genes it can read, making cell annotation extra hard compared to single cell analysis.*
 ---
@@ -20,7 +23,7 @@ In Seurat, Leiden is algorithm = 4 in `FindClusters()`
 
 From here, we can have supervised or unsupervised methods. Supervised methods outperform the unsupervised methods, except for the identification of unknown cell types. This is particularly true when the supervised methods use a reference dataset with high informational sufficiency, low complexity and high similarity to the query dataset. However, such outperformance could be undermined by some undesired dataset properties investigated in this study, which lead to uninformative and biased reference datasets. In these scenarios, unsupervised methods could be comparable to supervised methods. Although supervised methods are useful in some cases, they cannot be applied to all cases because reference data sets are not available for most organs, tissues, and conditions. [2]
 
-In our case, we do not have a reference dataset specific to our tissue and patients so we are constraint to use a general pure cell type reference dataset called “BlueprintEncodeData”. Using the supervised method *SingleR*, which was stated to be the best method for cell annotation in [1], we could get some annotations witha relatively high relative abundance (see the following image) but there are still some clusters that need further refinement and confirmation.
+In our case, we do not have a reference dataset specific to our tissue and patients so we are constraint to use a general pure cell type reference dataset called “BlueprintEncodeData”. Using the supervised method *SingleR*, which was stated to be the best method for cell annotation in [1], we could get some annotations with a relatively high relative abundance (see the following image) but there are still some clusters that need further refinement and confirmation.
 ![SingleRAnnotations](images/Leiden_SingleR_together.png)
 
 Now we are left with unnspecified clusters with the top genes per each and lots of information on the internet so let's clear all that up in this post.
@@ -39,30 +42,17 @@ Althought the reference was usefull to get a the whole picture of how the analys
 In [4] we have general curated markers for each cell type, but it's still better to be further concrete and use gene we now are present in MIBC.
 
 The only paper on the internet that uses Xenium in MIBC is the DUTRENEO paper, which the one we are working on.
-If we amplify the search criteria to spatial transcriptomics technologies in MIBC we have [Wahafu et. al 2025](https://www.sciencedirect.com/science/article/pii/S2666168323001313?ref=pdf_download&fr=RR-2&rr=9debb7123f256e11) which uses Visium 
+If we amplify the search criteria to spatial transcriptomics technologies in MIBC we have [Wahafu et. al 2025](https://www.sciencedirect.com/science/article/pii/S2666168323001313?ref=pdf_download&fr=RR-2&rr=9debb7123f256e11) which uses Visium.
+
+In the end, each cell type has a set of concrete genes that are unique to themselves. Those are called marker genes, and thank to them we can make differential expression analysis with `FindAllMarkers` function that also give us metrics to make a threshold of which cell type is each cell and which cells have unconcrete signatures (lacks high expression of a concrete cell type). Then to assign a lable to those unconcrete cells, there's `AddModuleScore` function to give us an score of its average expression levels. 
 
 ## 6. Do papers actually reclusterize ?
 Reclustering is a used resource inside our lab. However, it is used only when other methods have failed before. In our sample right now we have 20 clusters that have an unconcrete mix of cell types, that elevated number of cell types is too high to consider SingleR + the original cluster a good first approach. Right now it might be the sample or that other algorithm like BANKSY should be tested in order to get better results.
 
-## 7. We should take profit of the statistics 
-In pvp.markers we have: 
-p_val
-avg_log2FC
-pct.1
-pct.2
-p_val_adj
-cluster
-gene
-
-In markers_table_summary we have the top genes per cluster that are statistically significant  but we do not have the statisctics there !
-
-We have already takne profit of the statistics by excluden the genes related to a cell type label with low confidence trough our analysis pipeline
-
-EXPLAIN WHAT EACH COLUMN IN pvp.markers MEANS
+**CORRECTION:** In the end, I used SingleR and double checked its results with FindAllMarkers, AddMdouleScore and FindMarkers functions.
 
 # 8. Current AI methods ? Are they used ?
-
-
+They exist but current bioinformaticians seem to be reluctant to use them. With Xenium transcriptomics data there are few papers that use a neural network that have not been made by the authors. However, Machine Learning methods are widely used but benchmarking should that SingleR is the best for Xenium sptaila transcriptomics data, and it can not be considered a machine learning algorithm. 
 
 # Citations
 *For clustering methods:*
