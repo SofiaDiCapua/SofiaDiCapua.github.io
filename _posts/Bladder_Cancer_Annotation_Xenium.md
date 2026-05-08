@@ -1,5 +1,5 @@
 # Comparison of Cell Type Annotation methods in Muscle invasive Bladder cancer
-> *This post consists on the most important part of my master's thesis*
+> *This post consists on a part of my master's thesis, which is still on going so please be patient*
 
 ---
 ## 1. What is Xenium?
